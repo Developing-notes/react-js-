@@ -1,0 +1,49 @@
+import { useState } from 'react';
+
+function App() {
+  const [items, setItems] = useState({ 1: '1000', 2: '800', 3: '700' });
+  const [newKey, setNewKey] = useState('');
+  const [newValue, setNewValue] = useState('');
+  
+  const handleChange = (event, key) => {
+    setItems({ ...items, [key]: +event.target.value });
+  };
+  
+  const handleAdd = () => {
+    setItems({ ...items, [newKey]: +newValue });
+    setNewKey('');
+    setNewValue('');
+  };
+
+    console.log("items: ", items);
+  return (
+    <div>
+      <div>Total Amount:3500</div>
+      {Object.entries(items).map(([key, value]) => (
+        <div key={key}>
+          
+          <label>
+            {key}:
+            <input type="text" value={value} onChange={(event) => handleChange(event, key)} />
+          </label>
+        </div>
+      ))}
+      <div>
+        <label>
+          New Key:
+          <input type="text" value={newKey} onChange={(event) => setNewKey(event.target.value)} />
+        </label>
+        <label>
+          New Value:
+          <input type="text" value={newValue} onChange={(event) => setNewValue(event.target.value)} />
+        </label>
+        <button onClick={handleAdd}>Add</button>
+      </div>
+
+
+
+    </div>
+  );
+}
+  
+export default App;
