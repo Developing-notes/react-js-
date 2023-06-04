@@ -1,0 +1,67 @@
+import { useState, useEffect, useCallback } from "react";
+import debounce from "lodash.debounce";
+
+function App({ searchDelay = 3000 }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState([]);
+
+  const performSearch = async (term) => {
+    const response = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&origin=*&srsearch=${term}`
+    );
+    const data = await response.json();
+    setResults(data.query.search);
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((term) => {
+      console.log("term: ", term);  //search key
+      performSearch(term); //api pass
+    }, searchDelay),
+    [searchDelay]
+  );
+
+  useEffect(() => {
+    if (searchTerm) {
+      debouncedSearch(searchTerm);
+    } else {
+      setResults([]);
+    }
+  }, [searchTerm, debouncedSearch]);
+
+  return (
+    <div>
+      <h3>Wiki Search Engine</h3>
+      <hr />
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search Wikipedia."
+      />
+      {results.length > 0 ? (
+        <h1>Wikipedia Search Results</h1>
+      ) : (
+        <div>
+          <br />
+          <strong>Nothing Found</strong>
+        </div>
+      )}
+      <ul>
+        {results.map((result) => (
+          <li key={result.pageid}>
+            <a
+              href={`https://en.wikipedia.org/?curid=${result.pageid}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {result.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App
