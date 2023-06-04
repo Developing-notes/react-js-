@@ -1,0 +1,26 @@
+import './App.css';
+import { useState, useEffect, useRef } from 'react';
+    
+const App = () => {
+  
+  const [count, setCount] = useState(0);
+  const previousCountRef = useRef();
+
+  useEffect(() => {
+    previousCountRef.current = count;
+  }, [count]);
+
+  const handleClick = () => {
+    setCount(count + 5 );
+  };
+
+  return (
+    <div>
+      <p>Current count: {count}</p>
+      <p>Previous count: {previousCountRef.current}</p>
+      <button onClick={handleClick}>Increment Count</button>
+    </div>
+  );
+}
+
+export default App;
