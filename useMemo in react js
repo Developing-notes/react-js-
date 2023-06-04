@@ -1,0 +1,33 @@
+import './App.css';
+import { useMemo } from 'react';
+
+const App = () => {
+
+
+  const arr = [{
+    name: "ashok",
+    salary: "2000"
+  }, {
+    name: "vicky",
+    salary: "3000"
+  }, {
+    name: "raj",
+    salary: "4000"
+  }, {
+    name: "kumar",
+    salary: "1000"
+  }]
+
+
+  const total = useMemo(() => {
+    return arr.reduce((acc, item) => (acc + +item.salary), 0); //correct 
+  }, [arr]);
+  
+  return (
+    <div>
+      <p>Total: {total}</p>
+    </div>
+  );
+}
+
+export default App;
